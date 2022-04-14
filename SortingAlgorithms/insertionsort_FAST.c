@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-// This implementation of mergesort is for integer arrays. But since the algorithm can be used to sort any kind of data type,
+// This implementation of insertionsort is for integer arrays. But since the algorithm can be used to sort any kind of data type,
 // I used typedef to illustrate that it can be adapted to any other kind of data type.
 typedef int DATA_TYPE;
 
