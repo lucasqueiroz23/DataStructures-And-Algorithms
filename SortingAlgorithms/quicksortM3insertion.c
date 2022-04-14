@@ -72,9 +72,9 @@ void quickSort(DATA_TYPE *v, int leftIndex, int rightIndex)
     }
     int middleIndex = (leftIndex+rightIndex)/2;
 
-    DATA_TYPE x = v[middleIndex];
+    DATA_TYPE middleValue = v[middleIndex];
     v[middleIndex] = v[rightIndex-1];
-    v[rightIndex-1] = x;
+    v[rightIndex-1] = middleValue;
 
     if(v[leftIndex]>v[rightIndex-1])
     {
