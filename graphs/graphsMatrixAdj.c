@@ -138,7 +138,7 @@ void FloydWarshall(graph *g)
 	int i,s,t;
 	g->fechoTransitivo = MATRIXInit(g->quantidadeVertices,0);
 	for(s = 0; s<g->quantidadeVertices;s++)
-		for(t = 0; t< g->quantidadeArestas;t++)
+		for(t = 0; t< g->quantidadeVertices;t++)
 			g->fechoTransitivo[s][t] = g->matrizAdjacencia[s][t];
 
 	for(s = 0; s<g->quantidadeVertices;s++) g->fechoTransitivo[s][s] = 1;
