@@ -1,12 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define INT_MAX 2147483647
 /// LISTA DE ADJACENCIAS
 
 // "celula" representa cada node de uma lista encadeada
 typedef struct celula
 {
     int vertice;
+    int peso;
     struct celula *prox;
 } celula;
 
@@ -21,15 +23,18 @@ typedef struct aresta
 {
     int vertice1;
     int vertice2;
+    int peso;
 
 } aresta;
 
-aresta inicializaAresta(int v1,int v2)
+aresta inicializaAresta(int v1,int v2, int pesoDaAresta)
 {
     aresta a;
 
     a.vertice1 = v1;
     a.vertice2 = v2;
+	a.peso = pesoDaAresta;
+
 
     return a;
 }
@@ -109,7 +114,7 @@ int devolveQuantidadeArestas_E_formaVetorDeArestas(aresta a[],graph *g)
     int quantidadeArestas = 0;
     for(int indiceVertices = 0; indiceVertices<g->quantidadeVertices; indiceVertices++)
         for(celula *indiceCelulas = g->listaDeAdjacencias[indiceVertices] ; indiceCelulas!=NULL ; indiceCelulas = indiceCelulas->prox)
-            if(indiceVertices < indiceCelulas -> vertice) a[quantidadeArestas++] = inicializaAresta(indiceVertices,indiceCelulas->vertice);
+            if(indiceVertices < indiceCelulas -> vertice) a[quantidadeArestas++] = inicializaAresta(indiceVertices,indiceCelulas->vertice,indiceCelulas->peso);
 
     return quantidadeArestas;
 }
@@ -145,6 +150,7 @@ void DFS_buscaEmProfundidade_RECURSIVA(graph *g, aresta a)
 int devolveQuantidadeDeComponentesConexos(graph *g)
 {
     int qtdConexos = 0;
+    verticesJaVisitados = iniciaVetor_verticesJaVisitados(g->quantidadeVertices);
     for(int indiceDeVertices = 0; indiceDeVertices < g->quantidadeVertices; indiceDeVertices++)
     {
         if(verticesJaVisitados[indiceDeVertices] == 0)
@@ -218,7 +224,7 @@ void BFS_buscaEmLargura(graph *g, aresta a)
 
     enfileira(&f,a);
 
-    while(f->prox->aAresta.vertice1!=-1 && f->prox->aAresta.vertice2 != -1)
+    while(f->prox->aAresta.vertice1!=-1 && f->prox->aAresta.vertice2 != -1) /// FILA VAZIA!
     {
         a.vertice1 = f->prox->aAresta.vertice1;
         a.vertice2 = f->prox->aAresta.vertice2;
@@ -259,13 +265,105 @@ graph *inverteArestas_DIGRAPH(graph* g)
     for(int indexVertices = 0; indexVertices < g->quantidadeVertices ; indexVertices++)
         for(celula *indexArestas = g->listaDeAdjacencias[indexVertices]->prox; indexArestas!=NULL; indexArestas = indexArestas->prox)
         {
-			aresta novaAresta;
-			novaAresta.vertice1 = indexArestas->vertice;
-			novaAresta.vertice2 = indexVertices;
+            aresta novaAresta;
+            novaAresta.vertice1 = indexArestas->vertice;
+            novaAresta.vertice2 = indexVertices;
 
-			insereAresta_DIRECAO_UNICA(novoGrafo,novaAresta);
+            insereAresta_DIRECAO_UNICA(novoGrafo,novaAresta);
         }
 
-	return novoGrafo;
+    return novoGrafo;
+}
+
+typedef struct filaDeVertices
+{
+    int vertice;
+    struct filaDeVertices *prox;
+
+} filaDeVertices;
+
+filaDeVertices *criaFilaDeVertices()
+{
+    filaDeVertices *novaFila = malloc(sizeof(filaDeVertices));
+
+    novaFila->prox = novaFila;
+	novaFila->vertice = -1;
+
+    return novaFila;
+}
+
+void enfileiraFilaDeVertices(filaDeVertices **f, int vertice)
+{
+    filaDeVertices *novaCelula = malloc(sizeof(filaDeVertices));
+    novaCelula->prox = (*f)->prox;
+    (*f)->prox = novaCelula;
+    (*f)->vertice = vertice;
+
+    *f = novaCelula;
+    (*f)->vertice = -1;
+}
+
+int desenfileiraFilaDeVertices(filaDeVertices **f)
+{
+    filaDeVertices *novaCelula = malloc(sizeof(filaDeVertices));
+    novaCelula = (*f)->prox;
+    if(novaCelula->vertice == -1) /// FILA VAZIA!
+    {
+        return -1;
+    }
+
+	int x = novaCelula->vertice;
+
+    (*f)->prox = novaCelula->prox;
+    free(novaCelula);
+
+	return x;
+}
+
+int Bellman_Ford(graph *g,int vertice, int *pa, int *distanciaEntreVertices)
+{
+	int naFila[g->quantidadeVertices];
+	for(int i = 0;i<g->quantidadeVertices;i++)
+	{
+		pa[i] = -1;
+		distanciaEntreVertices[i] = INT_MAX;
+		naFila[i] = 0;
+	}
+	pa[vertice] = vertice;
+	distanciaEntreVertices[vertice] = 0;
+	filaDeVertices *fila = criaFilaDeVertices();
+	enfileiraFilaDeVertices(&fila,vertice);
+	naFila[vertice] = 1;
+	enfileiraFilaDeVertices(&fila,g->quantidadeVertices);
+	int k = 0;
+	while(1)
+	{
+		int v = desenfileiraFilaDeVertices(&fila);
+		if(v < g->quantidadeVertices)
+		{
+			for(celula *a = g->listaDeAdjacencias[v]->prox; a!=NULL; a = a->prox)
+			{
+				if(distanciaEntreVertices[v] + a->peso < distanciaEntreVertices[a->vertice])
+				{
+					distanciaEntreVertices[a->vertice] = distanciaEntreVertices[v] + a->peso;
+					pa[a->vertice] = v;
+					if(naFila[a->vertice] == 0)
+					{
+						enfileiraFilaDeVertices(&fila,a->vertice);
+						naFila[a->vertice] = 1;
+					}
+				}
+			}
+		}
+		else
+		{
+			if(fila->prox->vertice==-1) return 1;
+			if(++k >= g->quantidadeVertices) return 0;
+			enfileiraFilaDeVertices(&fila,v);
+			for(int t = 0;t<g->quantidadeVertices;t++)
+				naFila[t] = 0;
+		}
+	}
+
 }
 
