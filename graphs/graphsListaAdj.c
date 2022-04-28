@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define INT_MAX 2147483647
+int infinity = 2147483647;
+
 /// LISTA DE ADJACENCIAS
 
 // "celula" representa cada node de uma lista encadeada
@@ -33,48 +34,51 @@ aresta inicializaAresta(int v1,int v2, int pesoDaAresta)
 
     a.vertice1 = v1;
     a.vertice2 = v2;
-	a.peso = pesoDaAresta;
+    a.peso = pesoDaAresta;
 
 
     return a;
 }
 
-celula *criaNoCabeca()
+celula *criaNoCabeca(int vertice)
 {
     celula *novaCelula = malloc(sizeof(celula));
-    novaCelula->vertice = -1;
+    novaCelula->vertice = vertice;
     novaCelula->prox = NULL;
 
     return novaCelula;
 }
 
-void criaAdjacencia(int valorDoVertice, celula *noCabeca)
+void criaAdjacencia(int valorDoVertice, celula *noCabeca, int peso)
 {
     celula *novaCelula = malloc(sizeof(celula));
     novaCelula->vertice = valorDoVertice;
+    novaCelula->peso = peso;
     novaCelula->prox = noCabeca->prox;
     noCabeca->prox = novaCelula;
 }
 
 graph *graphInit(int qtdVertices)
 {
+    int i;
     graph *g = malloc(sizeof(graph));
     g->quantidadeVertices = qtdVertices;
     g->quantidadeArestas = 0;
     g->listaDeAdjacencias = malloc(qtdVertices*sizeof(celula));
 
-    for(int i = 0; i< qtdVertices; i++)
-        g->listaDeAdjacencias[i] = criaNoCabeca();
+    for(i = 0; i< qtdVertices; i++)
+        g->listaDeAdjacencias[i] = criaNoCabeca(i);
 
     return g;
 }
 
 void insereAresta(graph *g,aresta a)
 {
+    int peso = a.peso;
     int v1 = a.vertice1;
     int v2 = a.vertice2;
-    criaAdjacencia(v2, g->listaDeAdjacencias[v1]);
-    criaAdjacencia(v1, g->listaDeAdjacencias[v2]);
+    criaAdjacencia(v2, g->listaDeAdjacencias[v1], peso);
+    criaAdjacencia(v1, g->listaDeAdjacencias[v2], peso);
 
 }
 
@@ -252,10 +256,11 @@ void BFS_buscaEmLargura(graph *g, aresta a)
 
 void insereAresta_DIRECAO_UNICA(graph *g,aresta a)
 {
+    int peso = a.peso;
     int v1 = a.vertice1;
     int v2 = a.vertice2;
 
-    criaAdjacencia(v2, g->listaDeAdjacencias[v1]);
+    criaAdjacencia(v2, g->listaDeAdjacencias[v1], peso);
 
 }
 
@@ -287,7 +292,7 @@ filaDeVertices *criaFilaDeVertices()
     filaDeVertices *novaFila = malloc(sizeof(filaDeVertices));
 
     novaFila->prox = novaFila;
-	novaFila->vertice = -1;
+    novaFila->vertice = -1;
 
     return novaFila;
 }
@@ -312,58 +317,106 @@ int desenfileiraFilaDeVertices(filaDeVertices **f)
         return -1;
     }
 
-	int x = novaCelula->vertice;
+    int x = novaCelula->vertice;
 
     (*f)->prox = novaCelula->prox;
     free(novaCelula);
 
-	return x;
+    return x;
 }
 
 int Bellman_Ford(graph *g,int vertice, int *pa, int *distanciaEntreVertices)
 {
-	int naFila[g->quantidadeVertices];
-	for(int i = 0;i<g->quantidadeVertices;i++)
-	{
-		pa[i] = -1;
-		distanciaEntreVertices[i] = INT_MAX;
-		naFila[i] = 0;
-	}
-	pa[vertice] = vertice;
-	distanciaEntreVertices[vertice] = 0;
-	filaDeVertices *fila = criaFilaDeVertices();
-	enfileiraFilaDeVertices(&fila,vertice);
-	naFila[vertice] = 1;
-	enfileiraFilaDeVertices(&fila,g->quantidadeVertices);
-	int k = 0;
-	while(1)
-	{
-		int v = desenfileiraFilaDeVertices(&fila);
-		if(v < g->quantidadeVertices)
-		{
-			for(celula *a = g->listaDeAdjacencias[v]->prox; a!=NULL; a = a->prox)
-			{
-				if(distanciaEntreVertices[v] + a->peso < distanciaEntreVertices[a->vertice])
-				{
-					distanciaEntreVertices[a->vertice] = distanciaEntreVertices[v] + a->peso;
-					pa[a->vertice] = v;
-					if(naFila[a->vertice] == 0)
-					{
-						enfileiraFilaDeVertices(&fila,a->vertice);
-						naFila[a->vertice] = 1;
-					}
-				}
-			}
-		}
-		else
-		{
-			if(fila->prox->vertice==-1) return 1;
-			if(++k >= g->quantidadeVertices) return 0;
-			enfileiraFilaDeVertices(&fila,v);
-			for(int t = 0;t<g->quantidadeVertices;t++)
-				naFila[t] = 0;
-		}
-	}
+    int naFila[g->quantidadeVertices];
+    for(int i = 0; i<g->quantidadeVertices; i++)
+    {
+        pa[i] = -1;
+        distanciaEntreVertices[i] = infinity;
+        naFila[i] = 0;
+    }
+    pa[vertice] = vertice;
+    distanciaEntreVertices[vertice] = 0;
+    filaDeVertices *fila = criaFilaDeVertices();
+    enfileiraFilaDeVertices(&fila,vertice);
+    naFila[vertice] = 1;
+    enfileiraFilaDeVertices(&fila,g->quantidadeVertices);
+    int k = 0;
+    while(1)
+    {
+        int v = desenfileiraFilaDeVertices(&fila);
+        if(v < g->quantidadeVertices)
+        {
+            for(celula *a = g->listaDeAdjacencias[v]->prox; a!=NULL; a = a->prox)
+            {
+                if(distanciaEntreVertices[v] + a->peso < distanciaEntreVertices[a->vertice])
+                {
+                    distanciaEntreVertices[a->vertice] = distanciaEntreVertices[v] + a->peso;
+                    pa[a->vertice] = v;
+                    if(naFila[a->vertice] == 0)
+                    {
+                        enfileiraFilaDeVertices(&fila,a->vertice);
+                        naFila[a->vertice] = 1;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(fila->prox->vertice==-1) return 1;
+            if(++k >= g->quantidadeVertices) return 0;
+            enfileiraFilaDeVertices(&fila,v);
+            for(int t = 0; t<g->quantidadeVertices; t++)
+                naFila[t] = 0;
+        }
+    }
+
+}
+
+void Dijkstra(graph *g, int source)
+{
+
+    int *mature = malloc(g->quantidadeVertices*sizeof(int));
+    int *distances = malloc(g->quantidadeVertices*sizeof(int));
+    int *parent = malloc(g->quantidadeVertices*sizeof(int));
+
+    for(int v = 0; v < g->quantidadeVertices; v++)
+    {
+        parent[v] = -1;
+        distances[v] = infinity;
+        mature[v] = 0;
+    }
+
+    parent[source] = source;
+    distances[source] = 0;
+
+    while(1)
+    {
+        int min = infinity;
+        int y;
+
+        for(int z = 0; z < g->quantidadeVertices; z++)
+        {
+            if(mature[z]) continue;
+            if(distances[z] < min)
+            {
+                min = distances[z];
+                y = z;
+            }
+        }
+
+        if(min == infinity) break;
+
+        for(celula *t = g->listaDeAdjacencias[y]; t != NULL; t = t->prox)
+        {
+            if(mature[t->vertice] == 1) continue;
+            if(distances[y] + t->peso < distances[t->vertice])
+            {
+                distances[t->vertice] = distances[y] + t->peso;
+                parent[t->vertice] = y;
+            }
+        }
+        mature[y] = 1;
+    }
 
 }
 
