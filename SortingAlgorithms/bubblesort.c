@@ -11,7 +11,7 @@ void bubbleSort(DATA_TYPE *array, int arraySize)
     {
         for(int j = 0; j < arraySize - 1; j++)
         {
-            if(v[j+1] < v[j])
+            if(array[j+1] < array[j])
             {
                 temporaryValue = array[j];
                 array[j] = array[j+1];
