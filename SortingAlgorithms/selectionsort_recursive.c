@@ -4,7 +4,7 @@ typedef int DATA_TYPE;
 
 void selectionSort(DATA_TYPE *array, int leftIndex, int rightIndex)
 {
-	if(leftIndex==rightIndex) return;
+    if(leftIndex == rightIndex) return;
 
     int smallestValuePosition = leftIndex;
     for(int j = leftIndex+1 ; j<=rightIndex; j++)
