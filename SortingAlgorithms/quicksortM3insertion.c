@@ -52,8 +52,8 @@ int partition(DATA_TYPE *v,int leftIndex, int rightIndex)
         }
 
     int temporaryValue = v[j];
-    v[j] = v[r];
-    v[r] = temporaryValue;
+    v[j] = v[rightIndex];
+    v[rightIndex] = temporaryValue;
 
 
     return j;
@@ -90,7 +90,7 @@ void quickSort(DATA_TYPE *v, int leftIndex, int rightIndex)
         v[leftIndex] = temporaryValue;
     }
 
-    if(v[m]<v[r-1])
+    if(v[middleIndex]<v[rightIndex-1])
     {
         DATA_TYPE temporaryValue = v[rightIndex];
         v[rightIndex] = v[rightIndex-1];
