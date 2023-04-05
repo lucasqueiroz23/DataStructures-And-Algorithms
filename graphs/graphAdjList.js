@@ -24,7 +24,7 @@ export class GraphAdjList {
    * @returns {boolean} `true` if the node exists, `false` otherwise.
    */
   nodeExists(id) {
-    return this.nodes.filter((node) => node.id === id).length === 1;
+    return this.nodes.filter((node) => node.id === id).length > 0;
   }
   /**
    * Create an edge from node1, to node2.
