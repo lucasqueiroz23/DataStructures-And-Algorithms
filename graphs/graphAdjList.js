@@ -10,9 +10,11 @@ export class GraphAdjList {
   }
   /**
    * Adds a node to the graph.
+   * If there is a node with that id, it won't be added to the graph.
    * @param node The new node.
    */
   addNode(node) {
+    if (this.nodeExists(node.id)) return;
     this.nodes.push(node);
     this.adjacencyList[node.id] = [];
   }
@@ -44,12 +46,8 @@ export class GraphAdjList {
    * @param weight The weight between the nodes.
    */
   createAdjacency(node1, node2, weight = 1) {
-    if (!this.nodeExists(node1.id)) {
-      this.addNode(node1);
-    }
-    if (!this.nodeExists(node2.id)) {
-      this.addNode(node2);
-    }
+    this.addNode(node1);
+    this.addNode(node2);
 
     this.addEdge(node1, node2, weight);
     if (!this.isDigraph) {
