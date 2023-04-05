@@ -30,7 +30,7 @@ export class GraphAdjList {
    * @param node2 Node that node1 points to.
    * @param weight Weight of the edge.
    */
-	addEdge(node1, node2, weight){
+  addEdge(node1, node2, weight) {
     this.adjacencyList[node1.id].push(node2);
     this.edges.push(new Edge(node1, node2, weight));
   }
@@ -51,7 +51,7 @@ export class GraphAdjList {
       this.addNode(node2);
     }
 
-		this.addEdge(node1, node2, weight);
+    this.addEdge(node1, node2, weight);
     if (!this.isDigraph) {
       this.addEdge(node2, node1, weight);
     }
