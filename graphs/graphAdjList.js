@@ -1,12 +1,24 @@
 import { Edge } from "./edge";
-
+/**
+ * `Adjacency List` implementation of a `Graph`.
+ * There are two rules of usage:
+ *
+ * 1 - Every node must be an object.
+ *
+ * 2 - Every node must have an `id` attribute.
+ */
 export class GraphAdjList {
+  /**
+   * Creates a Graph.
+   * @param nodes An array of nodes.
+   * @param isDigraph {boolean} Boolean that determines if the graph is or isn't directed.
+   */
   constructor(nodes = [], isDigraph = false) {
-    this.nodes = nodes;
     this.isDigraph = isDigraph;
     this.edges = [];
     this.adjacencyList = {};
-    nodes.forEach((node) => (this.adjacencyList[node.id] = []));
+    this.nodes = [];
+    nodes.forEach((node) => this.addNode(node));
   }
   /**
    * Adds a node to the graph.
@@ -27,12 +39,28 @@ export class GraphAdjList {
     return this.nodes.filter((node) => node.id === id).length > 0;
   }
   /**
-   * Create an edge from node1, to node2.
+   * Checks if two nodes already have an adjacency.
+   * @param node1 First node of interest.
+   * @param node2 Second node of interest.
+   * @returns {boolean} `true` if the nodes already have an adjacency, `false` otherwise.
+   */
+  adjacencyAlreadyExists(node1, node2) {
+    return (
+      this.adjacencyList[node1.id].filter((item) => item.id === node2.id)
+        .length > 0
+    );
+  }
+  /**
+   * Create an edge from node1 to node2.
+   * If they are already adjacent or have the same id,
+   * the edge won't be created.
    * @param node1 First node.
    * @param node2 Node that node1 points to.
    * @param weight Weight of the edge.
    */
   addEdge(node1, node2, weight) {
+    if (this.adjacencyAlreadyExists(node1, node2) || node1.id === node2.id)
+      return;
     this.adjacencyList[node1.id].push(node2);
     this.edges.push(new Edge(node1, node2, weight));
   }
