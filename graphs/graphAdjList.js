@@ -58,7 +58,7 @@ export class GraphAdjList {
    * @param node2 Node that node1 points to.
    * @param weight Weight of the edge.
    */
-  addEdge(node1, node2, weight) {
+  addEdge(node1, node2, weight = 1) {
     if (this.adjacencyAlreadyExists(node1, node2) || node1.id === node2.id)
       return;
     this.adjacencyList[node1.id].push(node2);
@@ -81,5 +81,20 @@ export class GraphAdjList {
     if (!this.isDigraph) {
       this.addEdge(node2, node1, weight);
     }
+  }
+  /**
+   * Recursive implementation of a DFS.
+   * @param rootNode The starting node.
+   * @param visitedNodes A set of ids of nodes that have already been visited.
+   * @returns A set of the visited nodes in the order they were visited.
+   */
+  depthFirstSearch(rootNode, visitedNodes = new Set()) {
+    visitedNodes.add(rootNode.id);
+    for(const adjacentNode of this.adjacencyList[rootNode.id]) {
+      if(!visitedNodes.has(adjacentNode.id)) {
+        this.depthFirstSearch(adjacentNode, visitedNodes);
+      }
+    }
+    return visitedNodes;
   }
 }
