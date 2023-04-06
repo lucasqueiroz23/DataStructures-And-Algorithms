@@ -18,6 +18,7 @@ export class GraphAdjList {
     this.edges = [];
     this.adjacencyList = {};
     this.nodes = [];
+    this.ids = new Set();
     nodes.forEach((node) => this.addNode(node));
   }
   /**
@@ -27,6 +28,7 @@ export class GraphAdjList {
    */
   addNode(node) {
     if (this.nodeExists(node.id)) return;
+    this.ids.add(node.id);
     this.nodes.push(node);
     this.adjacencyList[node.id] = [];
   }
@@ -36,7 +38,7 @@ export class GraphAdjList {
    * @returns {boolean} `true` if the node exists, `false` otherwise.
    */
   nodeExists(id) {
-    return this.nodes.filter((node) => node.id === id).length > 0;
+    return this.ids.has(id);
   }
   /**
    * Checks if two nodes already have an adjacency.
@@ -59,7 +61,7 @@ export class GraphAdjList {
    * @param weight Weight of the edge.
    */
   addEdge(node1, node2, weight = 1) {
-    if (this.adjacencyAlreadyExists(node1, node2) || node1.id === node2.id)
+    if (node1.id === node2.id || this.adjacencyAlreadyExists(node1, node2))
       return;
     this.adjacencyList[node1.id].push(node2);
     this.edges.push(new Edge(node1, node2, weight));
@@ -90,8 +92,8 @@ export class GraphAdjList {
    */
   depthFirstSearch(rootNode, visitedNodes = new Set()) {
     visitedNodes.add(rootNode.id);
-    for(const adjacentNode of this.adjacencyList[rootNode.id]) {
-      if(!visitedNodes.has(adjacentNode.id)) {
+    for (const adjacentNode of this.adjacencyList[rootNode.id]) {
+      if (!visitedNodes.has(adjacentNode.id)) {
         this.depthFirstSearch(adjacentNode, visitedNodes);
       }
     }
@@ -103,8 +105,8 @@ export class GraphAdjList {
   getNumberOfConnectedComponents() {
     let numberOfConnectedComponents = 0;
     const visitedNodes = new Set();
-    for(const node of this.nodes) {
-      if(!visitedNodes.has(node.id)) {
+    for (const node of this.nodes) {
+      if (!visitedNodes.has(node.id)) {
         this.depthFirstSearch(node, visitedNodes);
         numberOfConnectedComponents++;
       }
