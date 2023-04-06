@@ -97,4 +97,19 @@ export class GraphAdjList {
     }
     return visitedNodes;
   }
+  /**
+   * @returns The number of connected components.
+   */
+  getNumberOfConnectedComponents() {
+    let numberOfConnectedComponents = 0;
+    const visitedNodes = new Set();
+    for(const node of this.nodes) {
+      if(!visitedNodes.has(node.id)) {
+        this.depthFirstSearch(node, visitedNodes);
+        numberOfConnectedComponents++;
+      }
+    }
+
+    return numberOfConnectedComponents;
+  }
 }
