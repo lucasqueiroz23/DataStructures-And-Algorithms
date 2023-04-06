@@ -8,7 +8,7 @@ export class Edge {
    * @param {*} node2 The node that `node1` points to.
    * @param {*} weight The Edge's weight.
    */
-  constructor(node1, node2, weight) {
+  constructor(node1, node2, weight = 1) {
     this.id1 = node1.id;
     this.id2 = node2.id;
     this.weight = weight;
