@@ -2,7 +2,13 @@
  * An Edge of a Graph.
  */
 export class Edge {
-  constructor(node1, node2, weight){
+  /**
+   * Creates an Edge between two nodes.
+   * @param {*} node1 The first node.
+   * @param {*} node2 The second node.
+   * @param {*} weight The Edge's weight.
+   */
+  constructor(node1, node2, weight) {
     this.id1 = node1.id;
     this.id2 = node2.id;
     this.weight = weight;
