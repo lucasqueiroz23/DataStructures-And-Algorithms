@@ -40,12 +40,14 @@ export class GraphAdjList {
   }
   /**
    * Checks if two nodes already have an adjacency.
+   * The first node must exist in the graph, or the 
+   * function will return false.
    * @param node1 First node of interest.
    * @param node2 Second node of interest.
    * @returns {boolean} `true` if the nodes already have an adjacency, `false` otherwise.
    */
   adjacencyAlreadyExists(node1, node2) {
-    return this.nodes[node1.id]
+    return this.nodeExists(node1.id)
       ? this.adjacencyList[node1.id].filter((item) => item.id === node2.id)
           .length > 0
       : false;
