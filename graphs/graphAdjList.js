@@ -17,8 +17,7 @@ export class GraphAdjList {
     this.isDigraph = isDigraph;
     this.edges = [];
     this.adjacencyList = {};
-    this.nodes = [];
-    this.ids = new Set();
+    this.nodes = {};
     nodes.forEach((node) => this.addNode(node));
   }
   /**
@@ -28,8 +27,7 @@ export class GraphAdjList {
    */
   addNode(node) {
     if (this.nodeExists(node.id)) return;
-    this.ids.add(node.id);
-    this.nodes.push(node);
+    this.nodes[node.id] = node;
     this.adjacencyList[node.id] = [];
   }
   /**
@@ -38,7 +36,7 @@ export class GraphAdjList {
    * @returns {boolean} `true` if the node exists, `false` otherwise.
    */
   nodeExists(id) {
-    return this.ids.has(id);
+    return !!this.nodes[id];
   }
   /**
    * Checks if two nodes already have an adjacency.
@@ -47,10 +45,10 @@ export class GraphAdjList {
    * @returns {boolean} `true` if the nodes already have an adjacency, `false` otherwise.
    */
   adjacencyAlreadyExists(node1, node2) {
-    return (
-      this.adjacencyList[node1.id].filter((item) => item.id === node2.id)
-        .length > 0
-    );
+    return this.nodes[node1.id]
+      ? this.adjacencyList[node1.id].filter((item) => item.id === node2.id)
+          .length > 0
+      : false;
   }
   /**
    * Create an edge from node1 to node2.
@@ -63,6 +61,8 @@ export class GraphAdjList {
   addEdge(node1, node2, weight = 1) {
     if (node1.id === node2.id || this.adjacencyAlreadyExists(node1, node2))
       return;
+    this.addNode(node1);
+    this.addNode(node2);
     this.adjacencyList[node1.id].push(node2);
     this.edges.push(new Edge(node1, node2, weight));
   }
@@ -76,9 +76,6 @@ export class GraphAdjList {
    * @param weight The weight between the nodes.
    */
   createAdjacency(node1, node2, weight = 1) {
-    this.addNode(node1);
-    this.addNode(node2);
-
     this.addEdge(node1, node2, weight);
     if (!this.isDigraph) {
       this.addEdge(node2, node1, weight);
