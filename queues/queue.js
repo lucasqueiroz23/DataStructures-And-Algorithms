@@ -1,7 +1,7 @@
 /**
  * Implementation of a Queue Data Structure.
  */
-export class Queue {
+module.exports = class Queue {
   constructor(){
     this.list = [];
   }

@@ -1,7 +1,7 @@
 /**
  * An Edge of a Graph.
  */
-export class Edge {
+module.exports = class Edge {
   /**
    * Creates an Edge between two nodes.
    * @param {*} node1 The first node.

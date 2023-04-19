@@ -1,5 +1,5 @@
-import { Edge } from "./edge";
-import { Queue } from "./queue";
+const Edge = require('./edge');
+const Queue = require('../queues/queue.js');
 /**
  * `Adjacency List` implementation of a `Graph`.
  * There are two rules of usage:
@@ -8,7 +8,7 @@ import { Queue } from "./queue";
  *
  * 2 - Every node must have an `id` attribute.
  */
-export class GraphAdjList {
+module.exports = class GraphAdjList {
   /**
    * Creates a Graph.
    * @param nodes An array of nodes.
