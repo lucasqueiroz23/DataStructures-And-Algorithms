@@ -28,7 +28,7 @@ typedef struct aresta
 
 } aresta;
 
-aresta inicializaAresta(int v1,int v2, int pesoDaAresta)
+aresta inicializa_aresta(int v1,int v2, int pesoDaAresta)
 {
     aresta a;
 
@@ -40,7 +40,7 @@ aresta inicializaAresta(int v1,int v2, int pesoDaAresta)
     return a;
 }
 
-celula *criaNoCabeca(int vertice)
+celula *cria_no_cabeca(int vertice)
 {
     celula *novaCelula = malloc(sizeof(celula));
     novaCelula->vertice = vertice;
@@ -49,7 +49,7 @@ celula *criaNoCabeca(int vertice)
     return novaCelula;
 }
 
-void criaAdjacencia(int valorDoVertice, celula *noCabeca, int peso)
+void cria_adjacencia(int valorDoVertice, celula *noCabeca, int peso)
 {
     celula *novaCelula = malloc(sizeof(celula));
     novaCelula->vertice = valorDoVertice;
@@ -72,7 +72,7 @@ graph *graphInit(int qtdVertices)
     return g;
 }
 
-void insereAresta(graph *g,aresta a)
+void insere_aresta(graph *g,aresta a)
 {
     int peso = a.peso;
     int v1 = a.vertice1;
@@ -109,11 +109,9 @@ void removeAresta(graph *g,aresta a)
 
     free(novo1);
     free(novo2);
-
-
 }
 
-int devolveQuantidadeArestas_E_formaVetorDeArestas(aresta a[],graph *g)
+int devolve_quantidade_arestas_e_forma_vetor_de_arestas(aresta a[],graph *g)
 {
     int quantidadeArestas = 0;
     for(int indiceVertices = 0; indiceVertices<g->quantidadeVertices; indiceVertices++)
@@ -125,7 +123,7 @@ int devolveQuantidadeArestas_E_formaVetorDeArestas(aresta a[],graph *g)
 
 int *verticesJaVisitados;
 
-int *iniciaVetor_verticesJaVisitados(int qtdVertices)
+int *inicia_vetor_vertices_ja_visitados(int qtdVertices)
 {
     int *vetor = malloc(qtdVertices*sizeof(int));
     for(int i = 0; i<qtdVertices; i++)
@@ -133,7 +131,7 @@ int *iniciaVetor_verticesJaVisitados(int qtdVertices)
     return vetor;
 }
 
-void DFS_buscaEmProfundidade_RECURSIVA(graph *g, aresta a)
+void DFS(graph *g, aresta a)
 {
     int v2 = a.vertice2;
     verticesJaVisitados[v2] = 1;
@@ -151,7 +149,7 @@ void DFS_buscaEmProfundidade_RECURSIVA(graph *g, aresta a)
     }
 }
 
-int devolveQuantidadeDeComponentesConexos(graph *g)
+int devolve_quantidade_de_componentes_conexos(graph *g)
 {
     int qtdConexos = 0;
     verticesJaVisitados = iniciaVetor_verticesJaVisitados(g->quantidadeVertices);
@@ -219,7 +217,7 @@ void desenfileira(fila **f)
 
 }
 
-void BFS_buscaEmLargura(graph *g, aresta a)
+void BFS(graph *g, aresta a)
 {
     fila *f = criaFila();
 
@@ -254,7 +252,7 @@ void BFS_buscaEmLargura(graph *g, aresta a)
 
 /// GRAFOS DIRIGIDOS (DIGRAPHS)
 
-void insereAresta_DIRECAO_UNICA(graph *g,aresta a)
+void insere_aresta_DIRECAO_UNICA(graph *g,aresta a)
 {
     int peso = a.peso;
     int v1 = a.vertice1;
@@ -264,7 +262,7 @@ void insereAresta_DIRECAO_UNICA(graph *g,aresta a)
 
 }
 
-graph *inverteArestas_DIGRAPH(graph* g)
+graph *inverte_arestas_DIGRAPH(graph* g)
 {
     graph *novoGrafo = graphInit(g->quantidadeVertices);
     for(int indexVertices = 0; indexVertices < g->quantidadeVertices ; indexVertices++)
@@ -325,7 +323,7 @@ int desenfileiraFilaDeVertices(filaDeVertices **f)
     return x;
 }
 
-int Bellman_Ford(graph *g,int vertice, int *pa, int *distanciaEntreVertices)
+int bellman_ford(graph *g,int vertice, int *pa, int *distanciaEntreVertices)
 {
     int naFila[g->quantidadeVertices];
     for(int i = 0; i<g->quantidadeVertices; i++)
@@ -372,7 +370,7 @@ int Bellman_Ford(graph *g,int vertice, int *pa, int *distanciaEntreVertices)
 
 }
 
-void Dijkstra(graph *g, int source)
+void dijkstra(graph *g, int source)
 {
 
     int *mature = malloc(g->quantidadeVertices*sizeof(int));
