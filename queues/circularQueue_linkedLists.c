@@ -8,39 +8,39 @@ typedef int DATA_TYPE;
 typedef struct queue
 {
     DATA_TYPE element;
-    struct queue *nextNode;
+    struct queue *next_node;
 
 } queue;
 
-queue *createQueue()
+queue *create_queue()
 {
     queue *q = malloc(sizeof(queue));
-    q->nextNode = q;
+    q->next_node = q;
     q->element = -1;
     return q;
 
 }
 
-void enqueue(queue **q, DATA_TYPE elementToInsert)
+void enqueue(queue **q, DATA_TYPE new_item)
 {
-    queue *newNode = malloc(sizeof(queue));
-    newNode->nextNode = (*q)->nextNode;
-    (*q)->nextNode = newNode;
-    (*q)->element = elementToInsert;
-    *q = newNode;
+    queue *new_node = malloc(sizeof(queue));
+    new_node->next_node = (*q)->next_node;
+    (*q)->next_node = new_node;
+    (*q)->element = new_item;
+    *q = new_node;
     (*q)->element = -1;
 }
 
 DATA_TYPE dequeue(queue **q)
 {
-    queue *trashNode = malloc(sizeof(queue));
-	trashNode = (*q)->nextNode;
-	if(trashNode->element == -1) return -1;
+    queue *trash = malloc(sizeof(queue));
+	trash = (*q)->next_node;
+	if(trash->element == -1) return -1;
 
 
-	DATA_TYPE frontElement = trashNode->element;
-	(*q)->nextNode = trashNode->nextNode;
-	free(trashNode);
+	DATA_TYPE front_element = trash->element;
+	(*q)->next_node = trash->next_node;
+	free(trash);
 
-	return frontElement;
+	return front_element;
 }
