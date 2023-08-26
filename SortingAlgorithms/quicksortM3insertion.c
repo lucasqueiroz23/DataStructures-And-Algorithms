@@ -1,6 +1,7 @@
 #include "swap.h"
 #include "insertionsort_FAST.h"
 #include "partition.h"
+#include "quicksortM3insertion.h"
 
 
 void quickSort(int* array, int leftIndex, int rightIndex)

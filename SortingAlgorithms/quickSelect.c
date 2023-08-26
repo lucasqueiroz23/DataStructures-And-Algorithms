@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "partition.h"
+#include "quickSelect.h"
 
 
 void quickSelect(int* array, int valueToSort, int leftIndex, int rightIndex) {
