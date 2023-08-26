@@ -1,32 +1,24 @@
-#include <stdlib.h>
+#include "swap.h"
+#include "insertionsort_FAST.h"
 
-// This implementation of insertionsort is for integer arrays. But since the algorithm can be used to sort any kind of data type,
-// I used typedef to illustrate that it can be adapted to any other kind of data type.
-typedef int DATA_TYPE;
-
-void insertionSort(DATA_TYPE *v, int leftIndex, int rightIndex)
+void insertionSort(int *array, int leftIndex, int rightIndex)
 {
-    DATA_TYPE temporaryValue = 0;
     for(int i = leftIndex; i < rightIndex; i++)
     {
 
-        if(v[i] > v[i+1])
+        if(array[i] > array[i+1])
         {
-            temporaryValue = v[i];
-            v[i] = v[i+1];
-            v[i+1] = temporaryValue;
+            swap(array, i, i+1);
 
         }
     }
     for(int i = leftIndex; i < rightIndex; i++)
     {
-        for(int j = i+1; j > leftIndex; j--)
+        for(int j = i + 1; j > leftIndex; j--)
         {
-            if(v[j] < v[j-1])
+            if(array[j] < array[j-1])
             {
-                temporaryValue = v[j-1];
-                v[j-1] = v[j];
-                v[j] = temporaryValue;
+                swap(array, j, j - 1);
             }
             else break;
         }
