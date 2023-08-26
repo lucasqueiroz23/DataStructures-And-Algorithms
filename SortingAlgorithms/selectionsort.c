@@ -1,11 +1,10 @@
-// This implementation of selectionSort is for integer arrays. But since the algorithm can be used to sort any kind of data type,
-// I used typedef to illustrate that it can be adapted to any other kind of data type.
-typedef int DATA_TYPE;
+#include "swap.h"
+#include "selectionsort.h"
 
-void selectionSort(DATA_TYPE *array, int arraySize)
+void selectionSort(int* array, const int arraySize)
 {
-    DATA_TYPE smallestValue = 0;
-    DATA_TYPE position_Of_SmallestValue = 0, temporaryValue = 0;
+    int smallestValue = 0;
+    int position_Of_SmallestValue = 0;
 
     for(int i = 0; i < arraySize; i++)
     {
@@ -23,10 +22,7 @@ void selectionSort(DATA_TYPE *array, int arraySize)
 
         if(smallestValue != array[i])
         {
-            temporaryValue = array[i];
-            array[i] = array[position_Of_SmallestValue];
-            array[position_Of_SmallestValue] = temporaryValue;
-
+            swap(array, i, position_Of_SmallestValue);
         }
     }
 }
