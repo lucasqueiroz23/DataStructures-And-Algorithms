@@ -1,11 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "binarySearch.h"
 
-// This implementation of the binary search is for integer arrays. But since the algorithm can be used to search any kind of data type,
-// I used typedef to illustrate that it can be adapted to any other kind of data type.
-typedef int DATA_TYPE;
 
-int binarySearch(DATA_TYPE *array, int arraySize, DATA_TYPE targetValue)
+int binarySearch(int *array, int arraySize, int targetValue)
 {
 	int leftIndex = 0;
 	int rightIndex = arraySize - 1;
