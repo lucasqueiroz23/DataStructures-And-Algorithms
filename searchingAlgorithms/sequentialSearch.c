@@ -6,7 +6,7 @@ typedef int DATA_TYPE;
 
 int sequentialSearch(DATA_TYPE *array, int arraySize, int targetValue)
 {
-	for(int i = 0; i<arraySize; i++)
+	for(int i = 0; i < arraySize; i++)
 		if(array[i] == targetValue) return i;
 
 	return -1;

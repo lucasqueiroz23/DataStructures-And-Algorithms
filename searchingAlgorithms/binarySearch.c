@@ -7,13 +7,13 @@ typedef int DATA_TYPE;
 
 int binarySearch(DATA_TYPE *array, int arraySize, DATA_TYPE targetValue)
 {
-	int leftIndex = -1;
-	int rightIndex = arraySize;
+	int leftIndex = 0;
+	int rightIndex = arraySize - 1;
 
 	if(array[leftIndex] == targetValue) return leftIndex;
 	if(array[rightIndex] == targetValue) return rightIndex;
 
-	while(leftIndex < rightIndex -1)
+	while(leftIndex < rightIndex - 1)
 	{
 		int middleIndex = (leftIndex + rightIndex)/2;
 		if(array[middleIndex] == targetValue) return middleIndex;
