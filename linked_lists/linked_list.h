@@ -24,4 +24,6 @@ int search(linked_list* ll, int target);
 int remove(linked_list* ll, int target);
 
 int update_value(linked_list* ll, int target, int new_value);
+
+void travel(linked_list* ll);
 #endif
