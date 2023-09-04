@@ -14,8 +14,16 @@ typedef struct linked_list {
 } linked_list;
 
 linked_list* create_linked_list();
-/**
+
+void travel(linked_list* ll);
+
+void reverse_travel(linked_list* ll);
+
 void push(linked_list* ll, int data);
+
+/**
+
+void insert(linked_list* ll, int data);
 
 int pop(linked_list* ll);
 
@@ -25,6 +33,5 @@ int remove(linked_list* ll, int target);
 
 int update_value(linked_list* ll, int target, int new_value);
 
-void travel(linked_list* ll);
 */
 #endif
