@@ -1,3 +1,4 @@
 # DataStructures-And-Algorithms
-Hi there!<br>
-<p>This repository is used to store some DSA implementations I learned/am learning. Most of its content is simply refactored code from my professors' implementations.
+
+Code for a lot of Data Structures and Algorithms. 
+The idea is to have an implementation of each of them in C or C++. I may also have implementations in other languages, but the focus is mainly on these two.
